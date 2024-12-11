@@ -16,6 +16,8 @@ class TripListFragment : Fragment() {
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
     }
 
     override fun onCreateView(
@@ -27,6 +29,9 @@ class TripListFragment : Fragment() {
         _binding = FragmentTripListBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        binding.btnListFragmentBot.setOnClickListener{
+            binding.tripListView.adapter =ArrayAdapter(requireContext(), android.R.layout.list_content, TripManager.getStringTripList())
+        }
         UpdateListBox()
 
         return inflater.inflate(R.layout.fragment_trip_list, container, false)
@@ -44,7 +49,6 @@ class TripListFragment : Fragment() {
 
     fun UpdateListBox(){
         var list = TripManager.getStringTripList()
-        val customAdapter = TripAdapter(list)
 
         for (ob in list)
         {
@@ -57,8 +61,9 @@ class TripListFragment : Fragment() {
         binding.tripRec.hasPendingAdapterUpdates()
         Log.d("Recycler","Adapter added",)*/
 
+        var myAdapter: ArrayAdapter<*>
         var myListView = binding.tripListView
-        val myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
+        myAdapter = ArrayAdapter(requireContext(), android.R.layout.list_content, list)
         myListView.adapter = myAdapter
 
 
