@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Yournal</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btnsettings">Settings</string>
+    <string name="btnadd">Add</string>
+    <string name="btnlist">List</string>
+    <string name="btnCreateTrip">Skapa</string>
+    <string name="btnRinceTrip">Rensa</string>
+    <string name="formFrom">Från</string>
+    <string name="formTo">Till</string>
+    <string name="formCompanyTrip">Företagsresa</string>
+    <string name="formStartTripValue">Start mätarvärde</string>
+    <string name="formToTripValue">Slut mätarvärde</string>
+    <string name="formDesc">Beskrivning</string>
+    <string name="formTime">Klockan</string>
+</resources>
