@@ -14,7 +14,6 @@ import com.example.yournal.TripManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    lateinit var tripManager: TripManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -6,11 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yournal.databinding.FragmentTripListBinding
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class TripListFragment : Fragment() {
     private  var _binding: FragmentTripListBinding? = null
@@ -30,7 +29,6 @@ class TripListFragment : Fragment() {
 
         UpdateListBox()
 
-        Log.d("Recycler","Bottom on create view",)
         return inflater.inflate(R.layout.fragment_trip_list, container, false)
     }
 
@@ -54,10 +52,14 @@ class TripListFragment : Fragment() {
         }
 
 
-        binding.tripRec.layoutManager = LinearLayoutManager(this.context)
+        /*binding.tripRec.layoutManager = LinearLayoutManager(this.context)
         binding.tripRec.adapter = customAdapter
         binding.tripRec.hasPendingAdapterUpdates()
-        Log.d("Recycler","Adapter added",)
+        Log.d("Recycler","Adapter added",)*/
+
+        var myListView = binding.tripListView
+        val myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
+        myListView.adapter = myAdapter
 
 
     }
@@ -66,10 +68,10 @@ class TripListFragment : Fragment() {
 class TripAdapter(private val dataSet: List<String>):
     RecyclerView.Adapter<TripAdapter.ViewHolder>(){
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView
+
         init{
             Log.d("Viewholder","init viewholder",)
-            textView = itemView.findViewById(R.id.singleTripListTextView)
+
         }
     }
         //https://developer.android.com/develop/ui/views/layout/recyclerview
@@ -85,7 +87,6 @@ class TripAdapter(private val dataSet: List<String>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Log.d("TripAdapter","onBindViewHolder",)
-        holder.textView.text = dataSet[position]
     }
 
     override fun getItemCount() = dataSet.size
