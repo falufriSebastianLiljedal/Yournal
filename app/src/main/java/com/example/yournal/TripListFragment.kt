@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yournal.databinding.FragmentTripListBinding
 
@@ -29,13 +30,11 @@ class TripListFragment : Fragment() {
         _binding = FragmentTripListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.btnListFragmentBot.setOnClickListener{
-            Log.d("Clicklistener","Adding click listener to btn fragmentlist")
-            TripManager.saveToFile()
-        }
+        binding.btnListFragmentBot.setOnClickListener {{}
+            Save() }
         UpdateListBox()
 
-        return inflater.inflate(R.layout.fragment_trip_list, container, false)
+        return view
     }
 
     companion object {
@@ -64,14 +63,18 @@ class TripListFragment : Fragment() {
 
         var myAdapter: ArrayAdapter<*>
         var myListView = binding.tripListView
-        myAdapter = ArrayAdapter(requireContext(), android.R.layout.list_content, list)
+        myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         myListView.adapter = myAdapter
 
 
     }
 }
+private fun Save(){
+    Log.d("Clicklistener","Adding click listener to btn fragmentlist")
+    TripManager.saveToFile()
+}
 
-class TripAdapter(private val dataSet: List<String>):
+/*class TripAdapter(private val dataSet: List<String>):
     RecyclerView.Adapter<TripAdapter.ViewHolder>(){
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -98,7 +101,7 @@ class TripAdapter(private val dataSet: List<String>):
     override fun getItemCount() = dataSet.size
 
 
-}
+}*/
 
 
 
