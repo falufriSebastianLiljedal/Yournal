@@ -30,7 +30,8 @@ class TripListFragment : Fragment() {
         val view = binding.root
 
         binding.btnListFragmentBot.setOnClickListener{
-            binding.tripListView.adapter =ArrayAdapter(requireContext(), android.R.layout.list_content, TripManager.getStringTripList())
+            Log.d("Clicklistener","Adding click listener to btn fragmentlist")
+            TripManager.saveToFile()
         }
         UpdateListBox()
 
