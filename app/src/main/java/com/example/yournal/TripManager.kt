@@ -141,9 +141,18 @@ fun loadFromFile(context: Context){
     val lines = File(context.getExternalFilesDir(null), "saved.txt").readLines()
     for(line in lines)
     {
+        var id = ""
+        var startValue = ""
+        var endValue = ""
+        var date = ""
+        var company = ""
+        var from = ""
+        var to = ""
+        var desc = ""
         Log.d("Loading", "line")
         for(letter in line)
         {
+            var activeTag = ""
             var latestType = ""
             var latestTag = ""
 
@@ -157,11 +166,31 @@ fun loadFromFile(context: Context){
             }
             if(latestType == "[]")
             {
-
+                activeTag = latestTag
+                latestTag = ""
+                latestType = ""
             }
             else if(latestType == "[/]")
             {
+                if(latestTag == activeTag)
+                {
+                    //Här ska vi göra olika saker beroende på activetag
+                    when(activeTag){
+                        "ID"-> id = latestTag
+                        "StartValue"-> startValue = latestTag
+                        "EndValue"-> endValue = latestTag
+                        "Date"-> date = latestTag
+                        "Company"-> company = latestTag
+                        "From"-> from = latestTag
+                        "To"-> to = latestTag
+                        "Desc"-> desc = latestTag
+                    }
 
+                }
+                else{
+                    //error kaos
+                }
+                activeTag = ""
             }
 
         }
