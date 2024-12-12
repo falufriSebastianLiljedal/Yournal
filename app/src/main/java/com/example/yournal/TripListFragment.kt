@@ -31,8 +31,12 @@ class TripListFragment : Fragment() {
         _binding = FragmentTripListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.btnListFragmentBot.setOnClickListener {{}
+        binding.btnListFragmentBot.setOnClickListener {
             Save(requireContext()) }
+
+        binding.btnListFragmentBot2.setOnClickListener {
+            Load(requireContext())
+        }
         UpdateListBox()
 
         return view
@@ -75,34 +79,6 @@ private fun Save(context: Context){
     TripManager.saveToFile(context)
 }
 
-/*class TripAdapter(private val dataSet: List<String>):
-    RecyclerView.Adapter<TripAdapter.ViewHolder>(){
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        init{
-            Log.d("Viewholder","init viewholder",)
-
-        }
-    }
-        //https://developer.android.com/develop/ui/views/layout/recyclerview
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripAdapter.ViewHolder {
-        Log.d("Tripadapter","Oncreateviewholder")
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_trip_list, parent, false)
-        Log.d("Tripadapter","Creating layout")
-
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        Log.d("TripAdapter","onBindViewHolder",)
-    }
-
-    override fun getItemCount() = dataSet.size
-
-
-}*/
-
-
-
+private fun Load(context: Context){
+    TripManager.loadFromFile(context)
+}

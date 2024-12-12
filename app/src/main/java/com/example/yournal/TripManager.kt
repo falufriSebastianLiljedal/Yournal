@@ -136,7 +136,39 @@ object TripManager{
         val externalContent = externalFile.readText()
         Log.d("Reading",externalContent)
     }
+fun loadFromFile(context: Context){
+    trips.clear()
+    val lines = File(context.getExternalFilesDir(null), "saved.txt").readLines()
+    for(line in lines)
+    {
+        Log.d("Loading", "line")
+        for(letter in line)
+        {
+            var latestType = ""
+            var latestTag = ""
 
+            if(letter == '[' || letter == ']' || letter == '/')
+            {
+                latestType+= letter
+            }
+
+            else{
+                latestTag += letter
+            }
+            if(latestType == "[]")
+            {
+
+            }
+            else if(latestType == "[/]")
+            {
+
+            }
+
+        }
+    }
+
+
+}
     private fun sortTripsByDate()
     {
         trips.sortByDescending { it.day }
