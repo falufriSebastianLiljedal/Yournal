@@ -140,9 +140,9 @@ object TripManager{
     }
 fun loadFromFile(context: Context){
     trips.clear()
-    val lines = File(context.getExternalFilesDir(null), "saved.txt").readLines()
-    for(line in lines)
-    {
+
+    File(context.getExternalFilesDir(null), "saved.txt").readLines().forEach()
+    {line ->
         var mode = Mode.NOTHING
         var id = ""
         var startValue = ""
@@ -152,14 +152,20 @@ fun loadFromFile(context: Context){
         var from = ""
         var to = ""
         var desc = ""
+        var tag = ""
+        var value = ""
         Log.d("Loading", "line")
         for(letter in line)
         {
-            var tag = ""
-            var value = ""
+            if(mode == Mode.NOTHING) {
+                tag= ""
+                value = ""
+            }
+
+
             if(letter == '[')
             {
-                mode = Mode.TAG
+                mode = Mode.STARTTAG
             }
             else if(letter == '/')
             {
@@ -176,7 +182,13 @@ fun loadFromFile(context: Context){
                 }
             }
             else{
-                if(mode == Mode.TAG)
+                if(mode == Mode.STARTTAG)
+                {
+                    tag = ""
+                    mode = Mode.TAG
+                    tag += letter
+                }
+                else if(mode == Mode.TAG)
                 {
                     tag += letter
                 }
@@ -224,5 +236,5 @@ fun loadFromFile(context: Context){
 }
 
 enum class Mode{
-    TAG, VALUE, NOTHING, ENDTAG, DONE
+    STARTTAG, TAG, VALUE, NOTHING, ENDTAG, DONE
 }
