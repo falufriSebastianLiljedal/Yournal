@@ -1,7 +1,10 @@
 package com.example.yournal
 
+import android.content.Context
+import android.content.res.AssetManager
 import android.util.Log
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
 import java.util.Date
@@ -112,19 +115,26 @@ object TripManager{
         return list
     }
 
-    fun saveToFile(){
+    fun saveToFile(context: Context){
         Log.d("Save","Saving")
         sortTripsByDate()
         var text = getSaveStringList()
-        val filename = "file://assets" + "settings/test.txt"
+        /*val am = context.assets
+        val filename = "settings/test.txt"
+        val file = am.open(filename)
+        file.writeText()
+        */
 
+        val externalFile = File(context.getExternalFilesDir(null), "saved.txt")
+        externalFile.writeText("")
         for(row in text)
         {
-
-            File(filename).appendText(row)
+            externalFile.appendText(row + "\n")
         }
 
 
+        val externalContent = externalFile.readText()
+        Log.d("Reading",externalContent)
     }
 
     private fun sortTripsByDate()

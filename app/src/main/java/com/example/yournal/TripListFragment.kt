@@ -1,5 +1,6 @@
 package com.example.yournal
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -31,7 +32,7 @@ class TripListFragment : Fragment() {
         val view = binding.root
 
         binding.btnListFragmentBot.setOnClickListener {{}
-            Save() }
+            Save(requireContext()) }
         UpdateListBox()
 
         return view
@@ -69,9 +70,9 @@ class TripListFragment : Fragment() {
 
     }
 }
-private fun Save(){
+private fun Save(context: Context){
     Log.d("Clicklistener","Adding click listener to btn fragmentlist")
-    TripManager.saveToFile()
+    TripManager.saveToFile(context)
 }
 
 /*class TripAdapter(private val dataSet: List<String>):
