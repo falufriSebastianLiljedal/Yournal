@@ -6,8 +6,10 @@ import android.util.Log
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
+import java.util.Locale
 
 
 class Trip(id: Int, newStartValue: Int = 0, newEndValue: Int = 0,
@@ -141,6 +143,7 @@ fun loadFromFile(context: Context){
     val lines = File(context.getExternalFilesDir(null), "saved.txt").readLines()
     for(line in lines)
     {
+        var mode = Mode.NOTHING
         var id = ""
         var startValue = ""
         var endValue = ""
@@ -152,48 +155,64 @@ fun loadFromFile(context: Context){
         Log.d("Loading", "line")
         for(letter in line)
         {
-            var activeTag = ""
-            var latestType = ""
-            var latestTag = ""
-
-            if(letter == '[' || letter == ']' || letter == '/')
+            var tag = ""
+            var value = ""
+            if(letter == '[')
             {
-                latestType+= letter
+                mode = Mode.TAG
             }
-
-            else{
-                latestTag += letter
-            }
-            if(latestType == "[]")
+            else if(letter == '/')
             {
-                activeTag = latestTag
-                latestTag = ""
-                latestType = ""
+                mode = Mode.ENDTAG
             }
-            else if(latestType == "[/]")
-            {
-                if(latestTag == activeTag)
+            else if(letter == ']'){
+                if(mode == Mode.ENDTAG)
                 {
-                    //Här ska vi göra olika saker beroende på activetag
-                    when(activeTag){
-                        "ID"-> id = latestTag
-                        "StartValue"-> startValue = latestTag
-                        "EndValue"-> endValue = latestTag
-                        "Date"-> date = latestTag
-                        "Company"-> company = latestTag
-                        "From"-> from = latestTag
-                        "To"-> to = latestTag
-                        "Desc"-> desc = latestTag
-                    }
+                    mode = Mode.DONE
+                }
+                else if(mode == Mode.TAG)
+                {
+                    mode = Mode.VALUE
+                }
+            }
+            else{
+                if(mode == Mode.TAG)
+                {
+                    tag += letter
+                }
+                else if(mode == Mode.VALUE){
+                    value+=letter
+                }
+            }
+            if(mode == Mode.DONE)
+            {
+                //Här ska vi göra olika saker beroende på activetag
+                when(tag){
+                    "ID"-> id = value
+                    "StartValue"-> startValue = value
+                    "EndValue"-> endValue = value
+                    "Date"-> date = value
+                    "Company"-> company = value
+                    "From"-> from = value
+                    "To"-> to = value
+                    "Desc"-> desc = value
+                }
 
-                }
-                else{
-                    //error kaos
-                }
-                activeTag = ""
+                mode = Mode.NOTHING
+                value = ""
+                tag = ""
             }
 
         }
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        var rightDate : Date = Date.from(Instant.now())
+        try {
+            rightDate = format.parse(date) ?: throw IllegalArgumentException("Invalid date format")
+        } catch (e: Exception) {
+            Log.d("Date error","Error parsing date: ${e.message}")
+        }
+        trips.add(Trip(id.toInt(), startValue.toInt(), endValue.toInt(),rightDate,
+            company.toBoolean(),from,to,desc))
     }
 
 
@@ -202,4 +221,8 @@ fun loadFromFile(context: Context){
     {
         trips.sortByDescending { it.day }
     }
+}
+
+enum class Mode{
+    TAG, VALUE, NOTHING, ENDTAG, DONE
 }
