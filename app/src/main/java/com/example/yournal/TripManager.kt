@@ -120,20 +120,11 @@ object TripManager{
     }
 
     fun saveToFile(context: Context){
-        Log.d("Save","Saving")
-        sortTripsByDate()
         var text = getSaveStringList()
 
-        val externalFile = File(context.getExternalFilesDir(null), "saved.txt")
-        externalFile.writeText("")
-        for(row in text)
-        {
-            externalFile.appendText(row + "\n")
-        }
+        sortTripsByDate()
 
-
-        val externalContent = externalFile.readText()
-        Log.d("Reading",externalContent)
+        saveStringToFile(text, "saved.txt", context)
     }
 fun loadFromFile(context: Context){
     trips.clear()
@@ -223,14 +214,31 @@ fun loadFromFile(context: Context){
         trips.add(Trip(id.toInt(), startValue.toInt(), endValue.toInt(),rightDate,
             company.toBoolean(),from,to,desc))
     }
-
-
 }
     private fun sortTripsByDate()
     {
         trips.sortByDescending { it.day }
     }
+
+    fun deleteAll(context: Context){
+        trips.clear()
+        saveStringToFile(listOf(), "saved.txt", context)
+    }
+
+    fun saveStringToFile(text : List<String>, fileName: String, context: Context){
+        val externalFile = File(context.getExternalFilesDir(null), fileName)
+        externalFile.writeText("")
+        for(row in text)
+        {
+            externalFile.appendText(row + "\n")
+        }
+
+
+        val externalContent = externalFile.readText()
+        Log.d("Reading",externalContent)
+    }
 }
+
 
 enum class Mode{
     STARTTAG, TAG, VALUE, NOTHING, ENDTAG, DONE

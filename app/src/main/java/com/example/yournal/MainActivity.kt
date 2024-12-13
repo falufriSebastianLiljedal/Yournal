@@ -55,9 +55,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
         binding.btnImgSettings.setOnClickListener{
-            val settingsFrag = SettingsFragment.newInstance(
-                "Test", "ing"
-            )
+            val settingsFrag = SettingsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainerView, settingsFrag)
                 .addToBackStack(null)
