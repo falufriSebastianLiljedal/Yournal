@@ -14,28 +14,11 @@
             android:id="@+id/tripListView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnListFragmentBot"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnListFragmentBot"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnListFragmentBot2" />
-
-        <Button
-            android:id="@+id/btnListFragmentBot2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Load"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

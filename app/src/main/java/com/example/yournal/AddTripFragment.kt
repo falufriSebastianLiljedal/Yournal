@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.example.yournal.databinding.FragmentAddTripBinding
 import java.time.Instant
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -19,18 +18,15 @@ class AddTripFragment : Fragment() {
 
     private  var _binding: FragmentAddTripBinding? = null
     private val binding get() = _binding!!
+
     private var calender = Calendar.getInstance(
         TimeZone.getTimeZone("Europe/Stockholm"), Locale("sv", "SE")
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddTripBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -122,28 +118,26 @@ class AddTripFragment : Fragment() {
     }
 
     private fun checkIfCreateEnable() {
-        var fromValue = 0<binding.editTextValueFrom.length()
-        var toValue = 0<binding.editTextValueTo.length()
-        var from = 0<binding.editTextFrom.length()
-        var to = 0<binding.editTextTo.length()
+        val fromValue = 0<binding.editTextValueFrom.length()
+        val toValue = 0<binding.editTextValueTo.length()
+        val from = 0<binding.editTextFrom.length()
+        val to = 0<binding.editTextTo.length()
 
         binding.btnCreate.isEnabled = (fromValue && toValue && from && to)
     }
 
     private fun createNewPost(){
-        var id = TripManager.getNextId()
-        var toValue = binding.editTextValueTo.text.toString().toInt()
-        var endValue = binding.editTextValueTo.text.toString().toInt()
+        val id = TripManager.getNextId()
+        val toValue = binding.editTextValueTo.text.toString().toInt()
+        val endValue = binding.editTextValueTo.text.toString().toInt()
+        val date = calender.time
+        val company = binding.checkBox.isChecked
+        val from = binding.editTextFrom.text.toString()
+        val to = binding.editTextTo.text.toString()
+        val desc = binding.editTextText3.toString()
+        val trip = Trip(id,toValue,endValue, date, company, from, to, desc)
 
-        var date = calender.time
-        var company = binding.checkBox.isChecked
-        var from = binding.editTextFrom.text.toString()
-        var to = binding.editTextTo.text.toString()
-        var desc = binding.editTextText3.toString()
-
-        var trip = Trip(id,toValue,endValue, date, company, from, to, desc)
-
-        TripManager.AddTrip(trip)
+        TripManager.addTrip(trip)
 
     }
 }

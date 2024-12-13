@@ -1,44 +1,39 @@
 package com.example.yournal
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.util.Log
 import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
 
-class Trip(id: Int, newStartValue: Int = 0, newEndValue: Int = 0,
+class Trip(newId: Int, newStartValue: Int = 0, newEndValue: Int = 0,
            newDay : Date = Date.from(Instant.now()),
             newIsCompanyTrip : Boolean = false,
             newFrom : String = "",
             newTo : String = "",
             newDesc:String = "")
 {
-    val id = id
-
-    var startValue : Int = newStartValue
-    var endValue : Int = newEndValue
+    private val id = newId
+    private var startValue : Int = newStartValue
+    private var endValue : Int = newEndValue
     var day : Date = newDay
-    var isCompanyTrip : Boolean = newIsCompanyTrip
-    var from : String = newFrom
-    var where : String = newTo
-    var description : String = newDesc
+    private var isCompanyTrip : Boolean = newIsCompanyTrip
+    private var from : String = newFrom
+    private var where : String = newTo
+    private var description : String = newDesc
 
     fun getString(): String{
-        val formatter = SimpleDateFormat("YYYY-MM-dd", Locale("sv", "SE"))
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale("sv", "SE"))
         return formatter.format(day)+ " " + from +"->"+ where
     }
 
     fun getSaveString(): String{
-        var trimFrom = trimHak(from)
-        var trimWhere = trimHak(where)
-        var trimDesc = trimHak(description)
+        val trimFrom = trimHak(from)
+        val trimWhere = trimHak(where)
+        val trimDesc = trimHak(description)
         return "[Post]"+
                     "[ID]"+
                         id.toString()+
@@ -72,11 +67,7 @@ class Trip(id: Int, newStartValue: Int = 0, newEndValue: Int = 0,
 
         for(a in value)
         {
-            if(a == '[' || a== ']')
-            {
-
-            }
-            else
+            if(!(a == '[' || a== ']'))
             {
                 hak += a
             }
@@ -90,7 +81,7 @@ object TripManager{
     private var trips  = arrayListOf<Trip>()
     private var nextId : Int = 0
 
-    fun AddTrip(newTrip: Trip){
+    fun addTrip(newTrip: Trip){
         trips.add(newTrip)
         nextId++
         sortTripsByDate()
@@ -120,7 +111,7 @@ object TripManager{
     }
 
     fun saveToFile(context: Context){
-        var text = getSaveStringList()
+        val text = getSaveStringList()
 
         sortTripsByDate()
 
@@ -170,18 +161,19 @@ fun loadFromFile(context: Context){
                 }
             }
             else{
-                if(mode == Mode.STARTTAG)
-                {
-                    tag = ""
-                    mode = Mode.TAG
-                    tag += letter
-                }
-                else if(mode == Mode.TAG)
-                {
-                    tag += letter
-                }
-                else if(mode == Mode.VALUE){
-                    value+=letter
+                when (mode) {
+                    Mode.STARTTAG -> {
+                        tag = ""
+                        mode = Mode.TAG
+                        tag += letter
+                    }
+                    Mode.TAG -> {
+                        tag += letter
+                    }
+                    Mode.VALUE -> {
+                        value+=letter
+                    }
+                    else->{}
                 }
             }
             if(mode == Mode.DONE)
@@ -225,7 +217,7 @@ fun loadFromFile(context: Context){
         saveStringToFile(listOf(), "saved.txt", context)
     }
 
-    fun saveStringToFile(text : List<String>, fileName: String, context: Context){
+    private fun saveStringToFile(text : List<String>, fileName: String, context: Context){
         val externalFile = File(context.getExternalFilesDir(null), fileName)
         externalFile.writeText("")
         for(row in text)

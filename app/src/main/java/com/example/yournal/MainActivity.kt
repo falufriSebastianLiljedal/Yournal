@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.yournal.databinding.ActivityMainBinding
-import com.example.yournal.Trip
-import com.example.yournal.TripManager
 
 
 
