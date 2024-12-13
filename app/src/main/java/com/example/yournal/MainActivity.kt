@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         enableEdgeToEdge()
         setContentView(view)
+        TripManager.loadFromFile(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -62,5 +63,10 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+    override fun onDestroy() {
+        TripManager.saveToFile(this)
+        super.onDestroy()
+        // Cleanup resources or save state
     }
 }
