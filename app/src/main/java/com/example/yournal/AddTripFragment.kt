@@ -1,27 +1,27 @@
 package com.example.yournal
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import com.example.yournal.databinding.ActivityMainBinding
 import com.example.yournal.databinding.FragmentAddTripBinding
 import java.time.Instant
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class AddTripFragment : Fragment() {
 
     private  var _binding: FragmentAddTripBinding? = null
     private val binding get() = _binding!!
+    private var calender = Calendar.getInstance(
+        TimeZone.getTimeZone("Europe/Stockholm"), Locale("sv", "SE")
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +34,13 @@ class AddTripFragment : Fragment() {
         _binding = FragmentAddTripBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        calender.timeZone
+        calender.set(Calendar.HOUR_OF_DAY, 2)
+        calender.set(Calendar.MINUTE, 0)
+        calender.set(Calendar.SECOND, 0)
+        calender.set(Calendar.MILLISECOND, 0)
+
+
         binding.btnRince.setOnClickListener{
             rinse()
         }
@@ -41,7 +48,6 @@ class AddTripFragment : Fragment() {
             createNewPost()
             rinse()
         }
-
         binding.editTextTo.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 checkIfCreateEnable()
@@ -87,7 +93,12 @@ class AddTripFragment : Fragment() {
             }
         })
 
+        binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            calender.set(Calendar.YEAR, year)
+            calender.set(Calendar.MONTH, month)
+            calender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
+        }
         return view
     }
 
@@ -123,7 +134,8 @@ class AddTripFragment : Fragment() {
         var id = TripManager.getNextId()
         var toValue = binding.editTextValueTo.text.toString().toInt()
         var endValue = binding.editTextValueTo.text.toString().toInt()
-        var date = Date(binding.calendarView.date)
+
+        var date = calender.time
         var company = binding.checkBox.isChecked
         var from = binding.editTextFrom.text.toString()
         var to = binding.editTextTo.text.toString()

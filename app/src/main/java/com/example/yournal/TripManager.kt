@@ -8,6 +8,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -30,7 +31,8 @@ class Trip(id: Int, newStartValue: Int = 0, newEndValue: Int = 0,
     var description : String = newDesc
 
     fun getString(): String{
-        return day.toString() + " " + from +"->"+ where
+        val formatter = SimpleDateFormat("YYYY-MM-dd", Locale("sv", "SE"))
+        return formatter.format(day)+ " " + from +"->"+ where
     }
 
     fun getSaveString(): String{
@@ -121,11 +123,6 @@ object TripManager{
         Log.d("Save","Saving")
         sortTripsByDate()
         var text = getSaveStringList()
-        /*val am = context.assets
-        val filename = "settings/test.txt"
-        val file = am.open(filename)
-        file.writeText()
-        */
 
         val externalFile = File(context.getExternalFilesDir(null), "saved.txt")
         externalFile.writeText("")
@@ -216,7 +213,7 @@ fun loadFromFile(context: Context){
             }
 
         }
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val format = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.getDefault())
         var rightDate : Date = Date.from(Instant.now())
         try {
             rightDate = format.parse(date) ?: throw IllegalArgumentException("Invalid date format")
