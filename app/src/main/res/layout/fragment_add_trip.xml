@@ -26,7 +26,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
-                android:layout_marginLeft="0dp"
                 android:layout_weight="0.33"
                 android:backgroundTint="@color/secondary"
                 android:backgroundTintMode="src_in"
@@ -43,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
-                android:layout_marginLeft="0dp"
                 android:layout_weight="0.33"
                 android:backgroundTint="@color/secondary"
                 android:enabled="false"
@@ -83,6 +81,8 @@
                         android:ems="10"
                         android:hint="@string/formStartTripValue"
                         android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="#595959"
                         android:textSize="24sp" />
 
                     <EditText
@@ -94,6 +94,8 @@
                         android:ems="10"
                         android:hint="@string/formToTripValue"
                         android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="#595959"
                         android:textSize="24sp" />
 
                     <EditText
@@ -105,6 +107,8 @@
                         android:ems="10"
                         android:hint="@string/formFrom"
                         android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="#595959"
                         android:textSize="24sp" />
 
                     <EditText
@@ -116,6 +120,8 @@
                         android:ems="10"
                         android:hint="@string/formTo"
                         android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="#595959"
                         android:textSize="24sp" />
 
                     <EditText
@@ -127,6 +133,8 @@
                         android:ems="10"
                         android:hint="@string/formDesc"
                         android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="#595959"
                         android:textSize="24sp" />
 
                     <CheckBox
@@ -143,16 +151,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp" />
 
-                <EditText
-                    android:id="@+id/editTextTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:ems="10"
-                    android:hint="@string/formTime"
-                    android:inputType="time"
-                    android:textSize="24sp" />
             </LinearLayout>
         </ScrollView>
 

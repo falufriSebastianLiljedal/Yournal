@@ -130,57 +130,49 @@ object TripManager{
     }
 fun loadFromFile(context: Context){
     trips.clear()
-    File(context.getExternalFilesDir(null), "settings.txt").readLines().forEach({
-        line ->
+    File(context.getExternalFilesDir(null), "settings.txt").readLines().forEach { line ->
         var mode = Mode.NOTHING
         var tag = ""
         var value = ""
-        for(letter in line)
-        {
-            if(mode == Mode.NOTHING) {
-                tag= ""
+        for (letter in line) {
+            if (mode == Mode.NOTHING) {
+                tag = ""
                 value = ""
             }
 
 
-            if(letter == '[')
-            {
+            if (letter == '[') {
                 mode = Mode.STARTTAG
-            }
-            else if(letter == '/')
-            {
+            } else if (letter == '/') {
                 mode = Mode.ENDTAG
-            }
-            else if(letter == ']'){
-                if(mode == Mode.ENDTAG)
-                {
+            } else if (letter == ']') {
+                if (mode == Mode.ENDTAG) {
                     mode = Mode.DONE
-                }
-                else if(mode == Mode.TAG)
-                {
+                } else if (mode == Mode.TAG) {
                     mode = Mode.VALUE
                 }
-            }
-            else{
+            } else {
                 when (mode) {
                     Mode.STARTTAG -> {
                         tag = ""
                         mode = Mode.TAG
                         tag += letter
                     }
+
                     Mode.TAG -> {
                         tag += letter
                     }
+
                     Mode.VALUE -> {
-                        value+=letter
+                        value += letter
                     }
-                    else->{}
+
+                    else -> {}
                 }
             }
-            if(mode == Mode.DONE)
-            {
+            if (mode == Mode.DONE) {
                 //Här ska vi göra olika saker beroende på activetag
-                when(tag){
+                when (tag) {
                     "LatestTripValue" -> currentTripValue = value.toInt()
                 }
 
@@ -191,7 +183,7 @@ fun loadFromFile(context: Context){
 
         }
 
-    })
+    }
     var highestId = 0
     File(context.getExternalFilesDir(null), "saved.txt").readLines().forEach()
     {line ->
@@ -206,7 +198,6 @@ fun loadFromFile(context: Context){
         var desc = ""
         var tag = ""
         var value = ""
-        Log.d("Loading", "line")
         for(letter in line)
         {
             if(mode == Mode.NOTHING) {
@@ -308,13 +299,10 @@ fun loadFromFile(context: Context){
             externalFile.appendText(row + "\n")
         }
 
-
-        val externalContent = externalFile.readText()
-        Log.d("Reading",externalContent)
     }
 
     private fun getSettingString():List<String>{
-        var text = listOf<String>()
+        val text = mutableListOf<String>()
         text += "[LatestTripValue]"+ getCurrentTripValue() +"[/LatestTripValue]"
         return text
     }

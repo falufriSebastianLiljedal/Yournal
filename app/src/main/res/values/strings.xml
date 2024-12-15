@@ -14,4 +14,5 @@
     <string name="formToTripValue">Slut mätarvärde</string>
     <string name="formDesc">Beskrivning</string>
     <string name="formTime">Klockan</string>
+    <string name="deleteAllValues">Radera alla värden</string>
 </resources>

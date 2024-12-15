@@ -1,5 +1,6 @@
 package com.example.yournal
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -110,6 +111,7 @@ class AddTripFragment : Fragment() {
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateFromValue(){
         binding.editTextValueFrom.setText(TripManager.getCurrentTripValue().toString())
         binding.editTextValueFrom.isEnabled = false
@@ -118,7 +120,6 @@ class AddTripFragment : Fragment() {
         binding.editTextTo.setText("")
         binding.editTextFrom.setText("")
         binding.checkBox.isChecked = false
-        binding.editTextTime.setText("")
         binding.editTextValueTo.setText("")
         binding.calendarView.date = Instant.now().toEpochMilli()
         binding.editTextText3.setText("")

@@ -5,6 +5,7 @@
     <color name="main">#EE0000</color>
     <color name="secondary">#00ee77</color>
     <color name="third">#0077ee</color>
+    <color name="hint">#595959</color>
 
 </resources>
 
