@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import com.example.yournal.databinding.FragmentTripListBinding
 
 class TripListFragment : Fragment() {
-    private  var _binding: FragmentTripListBinding? = null
+    private var _binding: FragmentTripListBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,16 +34,18 @@ class TripListFragment : Fragment() {
     }
 
 
-    private fun updateListBox(){
+    private fun updateListBox() {
         val list = TripManager.getStringTripList()
 
-        for (ob in list)
-        {
-            Log.d("Recycler",ob)
+        for (ob in list) {
+            Log.d("Recycler", ob)
         }
 
         val myListView = binding.tripListView
         val myAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, list)
         myListView.adapter = myAdapter
+        binding.tripListView.post {
+            binding.tripListView.setSelection(binding.tripListView.adapter.count - 1)
+        }
     }
 }

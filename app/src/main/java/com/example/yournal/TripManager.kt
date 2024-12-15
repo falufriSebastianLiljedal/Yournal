@@ -25,9 +25,13 @@ class Trip(newId: Int, newStartValue: Int = 0, newEndValue: Int = 0,
     private var where : String = newTo
     private var description : String = newDesc
 
+    fun getEndValue():Int{
+        return endValue
+    }
     fun getString(): String{
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale("sv", "SE"))
-        return formatter.format(day)+ " " + from +"->"+ where
+        return id.toString() + " "+ formatter.format(day)+ " " + startValue.toString()+ " "+
+                from +"->"+ where + " " + endValue.toString()
     }
 
     fun getSaveString(): String{
@@ -78,13 +82,20 @@ class Trip(newId: Int, newStartValue: Int = 0, newEndValue: Int = 0,
 }
 
 object TripManager{
+    private var currentTripValue = 0
     private var trips  = arrayListOf<Trip>()
     private var nextId : Int = 0
 
-    fun addTrip(newTrip: Trip){
+    fun getCurrentTripValue():Int{
+        return currentTripValue
+    }
+
+    fun addTrip(newTrip: Trip, context: Context){
+        currentTripValue = newTrip.getEndValue()
         trips.add(newTrip)
         nextId++
         sortTripsByDate()
+        saveToFile(context)
     }
     fun getNextId():Int{
         return nextId
@@ -111,15 +122,77 @@ object TripManager{
     }
 
     fun saveToFile(context: Context){
-        val text = getSaveStringList()
 
         sortTripsByDate()
 
-        saveStringToFile(text, "saved.txt", context)
+        saveStringToFile(getSettingString(),"settings.txt", context)
+        saveStringToFile(getSaveStringList(), "saved.txt", context)
     }
 fun loadFromFile(context: Context){
     trips.clear()
+    File(context.getExternalFilesDir(null), "settings.txt").readLines().forEach({
+        line ->
+        var mode = Mode.NOTHING
+        var tag = ""
+        var value = ""
+        for(letter in line)
+        {
+            if(mode == Mode.NOTHING) {
+                tag= ""
+                value = ""
+            }
 
+
+            if(letter == '[')
+            {
+                mode = Mode.STARTTAG
+            }
+            else if(letter == '/')
+            {
+                mode = Mode.ENDTAG
+            }
+            else if(letter == ']'){
+                if(mode == Mode.ENDTAG)
+                {
+                    mode = Mode.DONE
+                }
+                else if(mode == Mode.TAG)
+                {
+                    mode = Mode.VALUE
+                }
+            }
+            else{
+                when (mode) {
+                    Mode.STARTTAG -> {
+                        tag = ""
+                        mode = Mode.TAG
+                        tag += letter
+                    }
+                    Mode.TAG -> {
+                        tag += letter
+                    }
+                    Mode.VALUE -> {
+                        value+=letter
+                    }
+                    else->{}
+                }
+            }
+            if(mode == Mode.DONE)
+            {
+                //Här ska vi göra olika saker beroende på activetag
+                when(tag){
+                    "LatestTripValue" -> currentTripValue = value.toInt()
+                }
+
+                mode = Mode.NOTHING
+                value = ""
+                tag = ""
+            }
+
+        }
+
+    })
+    var highestId = 0
     File(context.getExternalFilesDir(null), "saved.txt").readLines().forEach()
     {line ->
         var mode = Mode.NOTHING
@@ -203,9 +276,16 @@ fun loadFromFile(context: Context){
         } catch (e: Exception) {
             Log.d("Date error","Error parsing date: ${e.message}")
         }
+
+        if(highestId < id.toInt())
+        {
+            highestId = id.toInt()
+        }
         trips.add(Trip(id.toInt(), startValue.toInt(), endValue.toInt(),rightDate,
             company.toBoolean(),from,to,desc))
     }
+
+    nextId = highestId +1
 }
     private fun sortTripsByDate()
     {
@@ -214,6 +294,9 @@ fun loadFromFile(context: Context){
 
     fun deleteAll(context: Context){
         trips.clear()
+        currentTripValue = 0
+        nextId = 0
+        saveStringToFile(listOf(), "settings.txt", context)
         saveStringToFile(listOf(), "saved.txt", context)
     }
 
@@ -228,6 +311,12 @@ fun loadFromFile(context: Context){
 
         val externalContent = externalFile.readText()
         Log.d("Reading",externalContent)
+    }
+
+    private fun getSettingString():List<String>{
+        var text = listOf<String>()
+        text += "[LatestTripValue]"+ getCurrentTripValue() +"[/LatestTripValue]"
+        return text
     }
 }
 

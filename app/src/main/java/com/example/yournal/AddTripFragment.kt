@@ -37,6 +37,9 @@ class AddTripFragment : Fragment() {
         calender.set(Calendar.MILLISECOND, 0)
 
 
+
+        updateFromValue()
+
         binding.btnRince.setOnClickListener{
             rinse()
         }
@@ -107,6 +110,10 @@ class AddTripFragment : Fragment() {
             }
     }
 
+    private fun updateFromValue(){
+        binding.editTextValueFrom.setText(TripManager.getCurrentTripValue().toString())
+        binding.editTextValueFrom.isEnabled = false
+    }
     private fun rinse(){
         binding.editTextTo.setText("")
         binding.editTextFrom.setText("")
@@ -115,20 +122,28 @@ class AddTripFragment : Fragment() {
         binding.editTextValueTo.setText("")
         binding.calendarView.date = Instant.now().toEpochMilli()
         binding.editTextText3.setText("")
+        updateFromValue()
     }
 
     private fun checkIfCreateEnable() {
         val fromValue = 0<binding.editTextValueFrom.length()
         val toValue = 0<binding.editTextValueTo.length()
+        var greater = false
+        if(fromValue && toValue)
+        {
+            greater = binding.editTextValueFrom.text.toString().toInt() <=
+                    binding.editTextValueTo.text.toString().toInt()
+        }
+
         val from = 0<binding.editTextFrom.length()
         val to = 0<binding.editTextTo.length()
 
-        binding.btnCreate.isEnabled = (fromValue && toValue && from && to)
+        binding.btnCreate.isEnabled = (fromValue && toValue && from && to && greater)
     }
 
     private fun createNewPost(){
         val id = TripManager.getNextId()
-        val toValue = binding.editTextValueTo.text.toString().toInt()
+        val toValue = binding.editTextValueFrom.text.toString().toInt()
         val endValue = binding.editTextValueTo.text.toString().toInt()
         val date = calender.time
         val company = binding.checkBox.isChecked
@@ -137,7 +152,8 @@ class AddTripFragment : Fragment() {
         val desc = binding.editTextText3.toString()
         val trip = Trip(id,toValue,endValue, date, company, from, to, desc)
 
-        TripManager.addTrip(trip)
+        TripManager.addTrip(trip, requireContext())
 
+        updateFromValue()
     }
 }
